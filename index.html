@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YOUR NAME — Portfolio</title>
+
+  <!-- Comic book fonts from Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =============================================
+       CSS VARIABLES — change colors here easily
+    ============================================= */
+    :root {
+      --black:   #0d0d0d;
+      --white:   #fffef2;
+      --yellow:  #ffe600;
+      --red:     #e63232;
+      --blue:    #1a6bff;
+      --border:  4px solid var(--black);
+      --shadow:  6px 6px 0px var(--black);
+    }
+
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--white);
+      background-image:
+        radial-gradient(circle, #ccc 1px, transparent 1px);
+      background-size: 20px 20px; /* halftone dot pattern */
+      font-family: 'Comic Neue', cursive;
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* =============================================
+       HEADER / SPLASH PANEL
+    ============================================= */
+    header {
+      background-color: var(--yellow);
+      border-bottom: var(--border);
+      padding: 3rem 2rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* decorative speed lines behind the header */
+    header::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 200%;
+      height: 200%;
+      background: repeating-conic-gradient(
+        from 0deg at 50% 50%,
+        transparent 0deg,
+        transparent 3deg,
+        rgba(0,0,0,0.04) 3deg,
+        rgba(0,0,0,0.04) 4deg
+      );
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .header-inner {
+      position: relative;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .avatar-box {
+      width: 140px;
+      height: 140px;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      background: var(--white);
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    /* Replace the emoji with an <img> tag pointing to your portrait */
+    .avatar-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .header-text h1 {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(3rem, 8vw, 6rem);
+      letter-spacing: 3px;
+      line-height: 1;
+      text-shadow: 4px 4px 0 var(--black);
+      -webkit-text-stroke: 1px var(--black);
+    }
+
+    .header-text .tagline {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      margin-top: 0.5rem;
+      background: var(--red);
+      color: var(--white);
+      display: inline-block;
+      padding: 4px 12px;
+      border: 2px solid var(--black);
+      box-shadow: 3px 3px 0 var(--black);
+    }
+
+    /* =============================================
+       NAV
+    ============================================= */
+    nav {
+      background: var(--black);
+      padding: 0.75rem 2rem;
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    nav a {
+      font-family: 'Bangers', cursive;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      color: var(--yellow);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    nav a:hover {
+      border-bottom-color: var(--yellow);
+      color: var(--white);
+    }
+
+    /* =============================================
+       MAIN COMIC GRID
+    ============================================= */
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+
+      /* Comic panel grid */
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+      gap: 1.5rem;
+    }
+
+    /* =============================================
+       PANEL BASE STYLE
+    ============================================= */
+    .panel {
+      background: var(--white);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.5rem;
+      position: relative;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .panel:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 8px 8px 0px var(--black);
+    }
+
+    /* Panel label in top-left corner */
+    .panel-label {
+      font-family: 'Bangers', cursive;
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      background: var(--black);
+      color: var(--yellow);
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      padding: 2px 10px;
+    }
+
+    .panel h2 {
+      font-family: 'Bangers', cursive;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      margin-top: 1.5rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .panel p {
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    /* =============================================
+       PANEL LAYOUT VARIANTS
+    ============================================= */
+
+    /* Full-width panel spans both columns */
+    .panel--wide {
+      grid-column: 1 / -1;
+    }
+
+    /* Slightly rotated accent panel */
+    .panel--tilt {
+      transform: rotate(-1deg);
+    }
+    .panel--tilt:hover {
+      transform: rotate(-1deg) translate(-2px, -2px);
+    }
+
+    /* Colored panel variants */
+    .panel--yellow { background: var(--yellow); }
+    .panel--red    { background: var(--red); color: var(--white); }
+    .panel--blue   { background: var(--blue); color: var(--white); }
+
+    /* =============================================
+       ABOUT PANEL
+    ============================================= */
+    #about {
+      /* wide + yellow = splash page energy */
+    }
+
+    /* =============================================
+       PROJECTS PANEL
+    ============================================= */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .project-card {
+      border: 3px solid var(--black);
+      box-shadow: 4px 4px 0 var(--black);
+      background: var(--white);
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .project-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--black);
+    }
+
+    .project-card a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .project-card .thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #ddd;
+      border-bottom: 3px solid var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      overflow: hidden;
+    }
+
+    .project-card .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .project-card .card-body {
+      padding: 0.75rem;
+    }
+
+    .project-card h3 {
+      font-family: 'Bangers', cursive;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .project-card p {
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .project-card .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: var(--yellow);
+      border: 2px solid var(--black);
+      padding: 1px 6px;
+      margin-top: 6px;
+      margin-right: 3px;
+      text-transform: uppercase;
+    }
+
+    /* =============================================
+       SPEECH BUBBLE
+    ============================================= */
+    .bubble {
+      position: relative;
+      background: var(--white);
+      border: var(--border);
+      border-radius: 1rem;
+      padding: 1rem 1.25rem;
+      box-shadow: var(--shadow);
+      font-family: 'Comic Neue', cursive;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-top: 1.5rem;
+    }
+
+    /* tail pointing left */
+    .bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 24px;
+      width: 0;
+      height: 0;
+      border-left: 16px solid transparent;
+      border-right: 0px solid transparent;
+      border-top: 20px solid var(--black);
+    }
+
+    .bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -14px;
+      left: 26px;
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 0px solid transparent;
+      border-top: 16px solid var(--white);
+      z-index: 1;
+    }
+
+    /* =============================================
+       SFX / ONOMATOPOEIA
+    ============================================= */
+    .sfx {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(3rem, 8vw, 5rem);
+      letter-spacing: 4px;
+      -webkit-text-stroke: 3px var(--black);
+      color: var(--yellow);
+      text-shadow: 4px 4px 0 var(--black);
+      display: block;
+      text-align: center;
+      line-height: 1;
+      margin: 0.5rem 0;
+    }
+
+    /* =============================================
+       CONTACT / LINKS PANEL
+    ============================================= */
+    .links-list {
+      list-style: none;
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .links-list a {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'Bangers', cursive;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+      color: var(--white);
+      text-decoration: none;
+      background: var(--black);
+      padding: 6px 14px;
+      border: 2px solid var(--white);
+      box-shadow: 3px 3px 0 rgba(255,255,255,0.4);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    .links-list a:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 5px 5px 0 rgba(255,255,255,0.4);
+    }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Bangers', cursive;
+      letter-spacing: 2px;
+      font-size: 1rem;
+      border-top: var(--border);
+      margin-top: 2rem;
+      background: var(--black);
+      color: var(--yellow);
+    }
+
+    /* =============================================
+       RESPONSIVE — stack to single column on mobile
+    ============================================= */
+    @media (max-width: 600px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+      .panel--wide {
+        grid-column: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- =============================================
+       HEADER — your splash page panel
+  ============================================= -->
+  <header>
+    <div class="header-inner">
+      <div class="avatar-box">
+        <!-- REPLACE with: <img src="your-portrait.png" alt="[Your Name]"> -->
+        🎨
+      </div>
+      <div class="header-text">
+        <h1>YOUR NAME</h1>
+        <p class="tagline">Artist · Developer · Pixel Wizard</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <!-- =============================================
+       COMIC PANELS
+  ============================================= -->
+  <main>
+
+    <!-- PANEL 1: About (wide, yellow) -->
+    <section class="panel panel--wide panel--yellow" id="about">
+      <span class="panel-label">Panel 01</span>
+      <h2>Origin Story</h2>
+      <p>
+        Hi! I'm <strong>[Your Name]</strong> — a pixel artist, game developer, and maker of weird fun things.
+        I build games, draw little worlds, and occasionally write code that does something useful.
+        Based in <strong>[Your City]</strong>.
+      </p>
+
+      <!-- Speech bubble example — feels very comic book -->
+      <div class="bubble">
+        "I make games about haunted houses, mopey mages, and things that blink at you."
+      </div>
+    </section>
+
+    <!-- PANEL 2: SFX accent (small, tilted) -->
+    <div class="panel panel--tilt panel--red" aria-hidden="true">
+      <span class="sfx">POW!</span>
+      <span class="sfx" style="font-size:2rem; color: var(--white);">Check out my work ↓</span>
+    </div>
+
+    <!-- PANEL 3: Skills -->
+    <section class="panel panel--blue">
+      <span class="panel-label">Panel 02</span>
+      <h2 style="color:var(--white);">Powers &amp; Abilities</h2>
+      <p style="color:var(--white);">
+        Pixel Art · Game Design · Aseprite · Unity / Godot · JavaScript · Creative Writing · Character Design · Sound Design
+      </p>
+    </section>
+
+    <!-- PANEL 4: Projects (wide) -->
+    <section class="panel panel--wide" id="projects">
+      <span class="panel-label">Panel 03</span>
+      <h2>The Work</h2>
+
+      <div class="projects-grid">
+
+        <!-- PROJECT CARD — duplicate this block for each project -->
+        <div class="project-card">
+          <a href="https://your-itch-link.itch.io/house-haunters" target="_blank" rel="noopener">
+            <div class="thumb">
+              <!-- REPLACE emoji with: <img src="house-haunters-thumb.png" alt="House Haunters"> -->
+              👻
+            </div>
+            <div class="card-body">
+              <h3>House Haunters</h3>
+              <p>A cozy horror game about competitive haunting. 48-hour jam game.</p>
+              <span class="tag">Game Jam</span>
+              <span class="tag">Pixel Art</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="project-card">
+          <a href="https://your-itch-link.itch.io/blink" target="_blank" rel="noopener">
+            <div class="thumb">👁️</div>
+            <div class="card-body">
+              <h3>Blink!</h3>
+              <p>Short description of Blink! — what it is and what makes it interesting.</p>
+              <span class="tag">Game</span>
+            </div>
+          </a>
+        </div>
+
+        <div class="project-card">
+          <a href="https://your-itch-link.itch.io/mopey-mage" target="_blank" rel="noopener">
+            <div class="thumb">🧙</div>
+            <div class="card-body">
+              <h3>Mopey Mage</h3>
+              <p>Short description of Mopey Mage — what makes it special.</p>
+              <span class="tag">RPG</span>
+              <span class="tag">Pixel Art</span>
+            </div>
+          </a>
+        </div>
+
+        <!-- ADD MORE CARDS HERE -->
+
+      </div>
+    </section>
+
+    <!-- PANEL 5: Contact -->
+    <section class="panel panel--wide" id="contact" style="background:var(--black);">
+      <span class="panel-label" style="background:var(--yellow); color:var(--black);">Panel 04</span>
+      <h2 style="color:var(--yellow);">Find Me Out There</h2>
+
+      <ul class="links-list">
+        <li><a href="https://github.com/yourusername" target="_blank">⚙ GitHub</a></li>
+        <li><a href="https://yourname.itch.io" target="_blank">🎮 itch.io</a></li>
+        <li><a href="https://linkedin.com/in/yourname" target="_blank">💼 LinkedIn</a></li>
+        <li><a href="mailto:you@email.com">✉ Email Me</a></li>
+        <!-- Add Etsy, Twitter/X, etc. here -->
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    © <span id="year"></span> YOUR NAME — Made with ☕ &amp; pixel dust
+  </footer>
+
+  <script>
+    // Auto-update copyright year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+
+</body>
+</html>
