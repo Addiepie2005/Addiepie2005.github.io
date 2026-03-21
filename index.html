@@ -4,509 +4,770 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>YOUR NAME — Portfolio</title>
-
-  <!-- Comic book fonts from Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Permanent+Marker&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Caveat:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
     /* =============================================
-       CSS VARIABLES — change colors here easily
+       PALETTE — James Harvey Nemo-inspired
+       Warm cream · muted teal · burnt orange accent
     ============================================= */
     :root {
-      --black:   #0d0d0d;
-      --white:   #fffef2;
-      --yellow:  #f7ca35;
-      --red:     #e63253;
-      --blue:    #38abf8;
-      --border:  4px solid var(--black);
-      --shadow:  6px 6px 0px var(--black);
+      --ink:         #1c1610;
+      --cream:       #f0e8cc;        /* warm page base */
+      --cream-mid:   #ddd0a8;
+      --cream-dark:  #c4b48a;
+      --teal:        #5a8a8c;        /* muted blue-teal */
+      --teal-light:  #8ab8ba;
+      --teal-dark:   #3a6062;
+      --teal-wash:   rgba(90,138,140,0.18);
+      --orange:      #d4622a;        /* burnt orange accent */
+      --orange-dim:  #a84820;
+      --orange-wash: rgba(212,98,42,0.15);
+      --warm-grey:   #9a8e7a;
+      --panel-bg:    #f5edda;
     }
 
-    /* =============================================
-       RESET & BASE
-    ============================================= */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background-color: var(--white);
-      background-image:
-        radial-gradient(circle, #ccc 1px, transparent 1px);
-      background-size: 20px 20px; /* halftone dot pattern */
-      font-family: 'Comic Neue', cursive;
-      color: var(--black);
+      background-color: var(--cream);
+      font-family: 'Special Elite', serif;
+      color: var(--ink);
       overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Fine paper grain — multiply so it reads as fiber not filter */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      pointer-events: none;
+      opacity: 0.28;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
+      mix-blend-mode: multiply;
     }
 
     /* =============================================
-       HEADER / SPLASH PANEL
+       SVG FILTERS
     ============================================= */
-    header {
-      background-color: var(--yellow);
-      border-bottom: var(--border);
-      padding: 3rem 2rem 2rem;
-      position: relative;
-      overflow: hidden;
+    .svg-filters { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+    /* =============================================
+       WATERCOLOR PANEL MIXIN
+       Applied via .wc-panel — each panel gets a
+       unique hand-painted wash feel
+    ============================================= */
+
+    /* Base watercolor wash — pooling at edges, lighter in center */
+    .wc-wash {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      border-radius: inherit;
     }
 
-    /* decorative speed lines behind the header */
+    /* =============================================
+       HEADER
+    ============================================= */
+    header {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 4px solid var(--ink);
+      background: var(--cream);
+      filter: url(#roughen);
+    }
+
+    /* Watercolor wash across header — teal pooling at top */
     header::before {
       content: '';
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 200%;
-      height: 200%;
-      background: repeating-conic-gradient(
-        from 0deg at 50% 50%,
-        transparent 0deg,
-        transparent 3deg,
-        rgba(0,0,0,0.04) 3deg,
-        rgba(0,0,0,0.04) 4deg
-      );
-      transform: translate(-50%, -50%);
+      inset: 0;
       pointer-events: none;
+      background:
+        /* teal wash pooling top-left */
+        radial-gradient(ellipse 80% 60% at -10% -20%, rgba(90,138,140,0.35) 0%, transparent 70%),
+        /* warm wash bottom-right */
+        radial-gradient(ellipse 60% 50% at 110% 110%, rgba(212,98,42,0.2) 0%, transparent 60%),
+        /* soft center bloom */
+        radial-gradient(ellipse 50% 70% at 50% 50%, rgba(240,232,204,0.4) 0%, transparent 100%);
+    }
+
+    /* Vertical pencil stroke hatching on header */
+    header::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='60'%3E%3Cline x1='6' y1='0' x2='5' y2='60' stroke='rgba(28,22,16,0.07)' stroke-width='0.8'/%3E%3Cline x1='13' y1='0' x2='14' y2='60' stroke='rgba(28,22,16,0.05)' stroke-width='0.6'/%3E%3Cline x1='20' y1='0' x2='19.5' y2='60' stroke='rgba(28,22,16,0.08)' stroke-width='0.9'/%3E%3Cline x1='27' y1='0' x2='28' y2='60' stroke='rgba(28,22,16,0.04)' stroke-width='0.7'/%3E%3Cline x1='34' y1='0' x2='33.5' y2='60' stroke='rgba(28,22,16,0.06)' stroke-width='0.8'/%3E%3C/svg%3E");
+      background-size: 40px 60px;
     }
 
     .header-inner {
       position: relative;
-      max-width: 900px;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 14px 1fr auto;
+      align-items: stretch;
+      max-width: 1000px;
       margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      flex-wrap: wrap;
     }
 
-    .avatar-box {
-      width: 140px;
-      height: 140px;
-      border: var(--border);
-      box-shadow: var(--shadow);
-      background: var(--white);
-      overflow: hidden;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 4rem;
+    .header-accent-bar {
+      background: var(--orange);
+      filter: url(#roughen-subtle);
     }
 
-    /* Replace the emoji with an <img> tag pointing to your portrait */
-    .avatar-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .header-content { padding: 2.5rem 2rem 2.2rem; }
+
+    .issue-tag {
+      font-size: 0.68rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      display: block;
+      margin-bottom: 0.6rem;
     }
 
-    .header-text h1 {
-      font-family: 'Bangers', cursive;
-      font-size: clamp(3rem, 8vw, 6rem);
+    header h1 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(4rem, 12vw, 9rem);
+      line-height: 0.88;
       letter-spacing: 3px;
-      line-height: 1;
-      text-shadow: 4px 4px 0 var(--black);
-      -webkit-text-stroke: 1px var(--black);
+      color: var(--ink);
+      text-shadow:
+        1px 1px 0 rgba(28,22,16,0.7),
+        2px 2px 0 rgba(28,22,16,0.3),
+        3px 3px 0 rgba(28,22,16,0.1),
+        0 0 12px rgba(28,22,16,0.06);
+      filter: url(#ink-bleed);
     }
 
-    .header-text .tagline {
-      font-family: 'Permanent Marker', cursive;
-      font-size: clamp(1rem, 3vw, 1.4rem);
-      margin-top: 0.5rem;
-      background: var(--red);
-      color: var(--white);
-      display: inline-block;
-      padding: 4px 12px;
-      border: 2px solid var(--black);
-      box-shadow: 3px 3px 0 var(--black);
+    header h1 span { color: var(--orange); }
+
+    .tagline {
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 0.8rem;
+      color: var(--teal-dark);
+      filter: url(#roughen-subtle);
+    }
+
+    .header-deco {
+      padding: 2rem 2rem 2rem 0;
+      display: flex;
+      align-items: flex-end;
+      opacity: 0.2;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 0.6rem;
+      letter-spacing: 3px;
+      writing-mode: vertical-rl;
+      color: var(--ink);
     }
 
     /* =============================================
        NAV
     ============================================= */
     nav {
-      background: var(--black);
-      padding: 0.75rem 2rem;
+      background: var(--ink);
       display: flex;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    nav::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg,
+        rgba(90,138,140,0.15) 0%,
+        transparent 40%,
+        rgba(212,98,42,0.1) 100%
+      );
     }
 
     nav a {
-      font-family: 'Bangers', cursive;
-      font-size: 1.3rem;
-      letter-spacing: 2px;
-      color: var(--yellow);
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.1rem;
+      letter-spacing: 3px;
+      color: var(--cream);
       text-decoration: none;
-      border-bottom: 2px solid transparent;
-      transition: border-color 0.15s;
+      padding: 0.65rem 1.6rem;
+      border-right: 1px solid rgba(240,232,204,0.1);
+      transition: background 0.15s, color 0.15s;
+      position: relative;
+      z-index: 1;
     }
 
-    nav a:hover {
-      border-bottom-color: var(--yellow);
-      color: var(--white);
-    }
+    nav a:hover { background: var(--teal-dark); color: var(--cream); }
 
     /* =============================================
-       MAIN COMIC GRID
+       MAIN GRID
     ============================================= */
     main {
       max-width: 1000px;
-      margin: 2rem auto;
+      margin: 2rem auto 3rem;
       padding: 0 1rem;
-
-      /* Comic panel grid */
       display: grid;
       grid-template-columns: 1fr 1fr;
-      grid-template-rows: auto;
-      gap: 1.5rem;
+      gap: 1.4rem;
     }
 
     /* =============================================
-       PANEL BASE STYLE
+       PANEL BASE
     ============================================= */
     .panel {
-      background: var(--white);
-      border: var(--border);
-      box-shadow: var(--shadow);
+      background: var(--panel-bg);
+      border: 3.5px solid var(--ink);
+      box-shadow:
+        5px 5px 0 var(--ink),
+        6px 6px 0 rgba(28,22,16,0.2);
       padding: 1.5rem;
       position: relative;
-      transition: transform 0.15s, box-shadow 0.15s;
+      overflow: hidden;
+      animation: fadeUp 0.45s ease both;
+      filter: url(#roughen-panel);
     }
 
-    .panel:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 8px 8px 0px var(--black);
-    }
-
-    /* Panel label in top-left corner */
-    .panel-label {
-      font-family: 'Bangers', cursive;
-      font-size: 0.85rem;
-      letter-spacing: 2px;
-      background: var(--black);
-      color: var(--yellow);
+    /* ---- WATERCOLOR WASH — base layer on all panels ---- */
+    .panel::before {
+      content: '';
       position: absolute;
-      top: -1px;
-      left: -1px;
-      padding: 2px 10px;
+      inset: -4px;  /* bleed slightly past border */
+      pointer-events: none;
+      z-index: 0;
+      /* pooling at corners + edges, lighter center — like actual watercolor */
+      background:
+        radial-gradient(ellipse 70% 50% at 0% 0%,   rgba(90,138,140,0.22) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 100% 100%, rgba(90,138,140,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 80% at 50% 50%,  rgba(245,237,218,0.55) 30%, transparent 100%);
+    }
+
+    /* ---- VERTICAL PENCIL STROKES + edge vignette ---- */
+    .panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='80'%3E%3Cline x1='5' y1='0' x2='4.5' y2='80' stroke='rgba(28,22,16,0.055)' stroke-width='0.7'/%3E%3Cline x1='12' y1='2' x2='12.5' y2='80' stroke='rgba(28,22,16,0.035)' stroke-width='0.5'/%3E%3Cline x1='19' y1='0' x2='18.5' y2='80' stroke='rgba(28,22,16,0.065)' stroke-width='0.8'/%3E%3Cline x1='26' y1='1' x2='27' y2='80' stroke='rgba(28,22,16,0.03)' stroke-width='0.5'/%3E%3Cline x1='34' y1='0' x2='33.5' y2='80' stroke='rgba(28,22,16,0.06)' stroke-width='0.75'/%3E%3Cline x1='41' y1='0' x2='41.5' y2='80' stroke='rgba(28,22,16,0.04)' stroke-width='0.55'/%3E%3Cline x1='48' y1='2' x2='47.5' y2='80' stroke='rgba(28,22,16,0.05)' stroke-width='0.65'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse at 50% 50%, transparent 50%, rgba(28,22,16,0.055) 100%);
+      background-size: 52px 80px, 100% 100%;
+    }
+
+    .panel > * { position: relative; z-index: 1; }
+
+    .panel--wide { grid-column: 1 / -1; }
+
+    /* =============================================
+       PANEL COLOR VARIANTS — each gets its own wash
+    ============================================= */
+
+    /* TEAL panel */
+    .panel--teal {
+      background: #d4e8e9;
+    }
+    .panel--teal::before {
+      background:
+        radial-gradient(ellipse 80% 60% at 0% 0%,   rgba(58,96,98,0.35) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 50% at 100% 100%, rgba(58,96,98,0.28) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 70% at 50% 50%,  rgba(212,232,233,0.5) 30%, transparent 100%);
+    }
+
+    /* ORANGE/warm panel */
+    .panel--warm {
+      background: #f2dcc8;
+    }
+    .panel--warm::before {
+      background:
+        radial-gradient(ellipse 70% 55% at 5% 5%,   rgba(212,98,42,0.28) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 45% at 95% 95%, rgba(168,72,32,0.22) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 80% at 50% 50%,  rgba(242,220,200,0.5) 30%, transparent 100%);
+    }
+
+    /* DARK ink panel */
+    .panel--ink {
+      background: var(--ink);
+      color: var(--cream);
+    }
+    .panel--ink::before {
+      background:
+        radial-gradient(ellipse 60% 50% at 0% 0%,   rgba(90,138,140,0.25) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 100% 100%, rgba(90,138,140,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 70% at 50% 50%,  rgba(28,22,16,0.0) 30%, transparent 100%);
+    }
+    .panel--ink::after {
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='80'%3E%3Cline x1='5' y1='0' x2='4.5' y2='80' stroke='rgba(240,232,204,0.06)' stroke-width='0.7'/%3E%3Cline x1='12' y1='2' x2='12.5' y2='80' stroke='rgba(240,232,204,0.04)' stroke-width='0.5'/%3E%3Cline x1='19' y1='0' x2='18.5' y2='80' stroke='rgba(240,232,204,0.07)' stroke-width='0.8'/%3E%3Cline x1='26' y1='1' x2='27' y2='80' stroke='rgba(240,232,204,0.03)' stroke-width='0.5'/%3E%3Cline x1='34' y1='0' x2='33.5' y2='80' stroke='rgba(240,232,204,0.055)' stroke-width='0.75'/%3E%3Cline x1='41' y1='0' x2='41.5' y2='80' stroke='rgba(240,232,204,0.04)' stroke-width='0.55'/%3E%3Cline x1='48' y1='2' x2='47.5' y2='80' stroke='rgba(240,232,204,0.05)' stroke-width='0.65'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse at 50% 50%, transparent 40%, rgba(0,0,0,0.3) 100%);
+      background-size: 52px 80px, 100% 100%;
+    }
+
+    /* BEN-DAY dots variant */
+    .panel--dots {
+      background-color: var(--panel-bg);
+      background-image:
+        radial-gradient(circle, rgba(90,138,140,0.5) 1.4px, transparent 1.4px),
+        radial-gradient(circle, rgba(90,138,140,0.2) 2px, transparent 2px);
+      background-size: 8px 8px, 16px 16px;
+      background-position: 0 0, 4px 4px;
+    }
+    .panel--dots::before {
+      background:
+        radial-gradient(ellipse 70% 50% at 0% 0%,   rgba(90,138,140,0.3) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 50% at 100% 100%, rgba(212,98,42,0.2) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 80% at 50% 50%,  rgba(245,237,218,0.45) 30%, transparent 100%);
+    }
+
+    .panel-num {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      position: absolute;
+      top: 7px; right: 10px;
+      opacity: 0.18;
+      z-index: 1;
     }
 
     .panel h2 {
-      font-family: 'Bangers', cursive;
-      font-size: 2rem;
-      letter-spacing: 2px;
-      margin-top: 1.5rem;
+      font-family: 'Bebas Neue', cursive;
+      font-size: 2.2rem;
+      letter-spacing: 3px;
       margin-bottom: 0.75rem;
+      line-height: 1;
     }
 
-    .panel p {
-      line-height: 1.6;
-      font-size: 1rem;
+    /* Inked underline with watercolor bleed */
+    .panel h2::after {
+      content: '';
+      display: block;
+      height: 3px;
+      background: currentColor;
+      margin-top: 0.4rem;
+      box-shadow: 0 1px 0 rgba(28,22,16,0.2), 0 2px 3px rgba(28,22,16,0.1);
+      filter: url(#roughen-subtle);
     }
 
-    /* =============================================
-       PANEL LAYOUT VARIANTS
-    ============================================= */
+    .panel p { font-size: 0.95rem; line-height: 1.75; }
 
-    /* Full-width panel spans both columns */
-    .panel--wide {
-      grid-column: 1 / -1;
-    }
-
-    /* Slightly rotated accent panel */
-    .panel--tilt {
-      transform: rotate(-1deg);
-    }
-    .panel--tilt:hover {
-      transform: rotate(-1deg) translate(-2px, -2px);
-    }
-
-    /* Colored panel variants */
-    .panel--yellow { background: var(--yellow); }
-    .panel--red    { background: var(--red); color: var(--white); }
-    .panel--blue   { background: var(--blue); color: var(--white); }
-
-    /* =============================================
-       ABOUT PANEL
-    ============================================= */
-    #about {
-      /* wide + yellow = splash page energy */
-    }
-
-    /* =============================================
-       PROJECTS PANEL
-    ============================================= */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .project-card {
-      border: 3px solid var(--black);
-      box-shadow: 4px 4px 0 var(--black);
-      background: var(--white);
-      overflow: hidden;
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-
-    .project-card:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 6px 6px 0 var(--black);
-    }
-
-    .project-card a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .project-card .thumb {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: #ddd;
-      border-bottom: 3px solid var(--black);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      overflow: hidden;
-    }
-
-    .project-card .thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .project-card .card-body {
-      padding: 0.75rem;
-    }
-
-    .project-card h3 {
-      font-family: 'Bangers', cursive;
-      font-size: 1.3rem;
-      letter-spacing: 1px;
-      margin-bottom: 4px;
-    }
-
-    .project-card p {
-      font-size: 0.85rem;
-      line-height: 1.4;
-    }
-
-    .project-card .tag {
-      display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 700;
-      background: var(--yellow);
-      border: 2px solid var(--black);
-      padding: 1px 6px;
-      margin-top: 6px;
-      margin-right: 3px;
-      text-transform: uppercase;
-    }
+    .panel:nth-child(1) { animation-delay: 0.05s; }
+    .panel:nth-child(2) { animation-delay: 0.12s; }
+    .panel:nth-child(3) { animation-delay: 0.18s; }
+    .panel:nth-child(4) { animation-delay: 0.24s; }
+    .panel:nth-child(5) { animation-delay: 0.30s; }
 
     /* =============================================
        SPEECH BUBBLE
     ============================================= */
     .bubble {
       position: relative;
-      background: var(--white);
-      border: var(--border);
-      border-radius: 1rem;
-      padding: 1rem 1.25rem;
-      box-shadow: var(--shadow);
-      font-family: 'Comic Neue', cursive;
-      font-size: 1rem;
-      line-height: 1.5;
+      background: rgba(245,237,218,0.92);
+      border: 2.5px solid var(--ink);
+      border-radius: 14px 16px 14px 12px;
+      padding: 0.9rem 1.2rem;
       margin-top: 1.5rem;
+      font-family: 'Caveat', cursive;
+      font-size: 1.15rem;
+      line-height: 1.55;
+      box-shadow:
+        3px 3px 0 var(--ink),
+        inset 0 0 30px rgba(90,138,140,0.12),
+        inset 0 0 8px rgba(212,98,42,0.06);
+      filter: url(#roughen-subtle);
     }
 
-    /* tail pointing left */
     .bubble::after {
       content: '';
       position: absolute;
-      bottom: -20px;
-      left: 24px;
-      width: 0;
-      height: 0;
-      border-left: 16px solid transparent;
-      border-right: 0px solid transparent;
-      border-top: 20px solid var(--black);
+      bottom: -20px; left: 22px;
+      border-left: 15px solid transparent;
+      border-top: 20px solid var(--ink);
     }
 
     .bubble::before {
       content: '';
       position: absolute;
-      bottom: -14px;
-      left: 26px;
-      width: 0;
-      height: 0;
-      border-left: 12px solid transparent;
-      border-right: 0px solid transparent;
-      border-top: 16px solid var(--white);
+      bottom: -13px; left: 24px;
+      border-left: 11px solid transparent;
+      border-top: 14px solid rgba(245,237,218,0.95);
       z-index: 1;
     }
 
     /* =============================================
-       SFX / ONOMATOPOEIA
+       STAMP
     ============================================= */
-    .sfx {
-      font-family: 'Bangers', cursive;
-      font-size: clamp(3rem, 8vw, 5rem);
-      letter-spacing: 4px;
-      -webkit-text-stroke: 3px var(--black);
-      color: var(--yellow);
-      text-shadow: 4px 4px 0 var(--black);
-      display: block;
-      text-align: center;
+    .stamp {
+      font-family: 'Bebas Neue', cursive;
+      font-size: clamp(2.5rem, 7vw, 4.5rem);
+      letter-spacing: 5px;
+      color: var(--orange);
       line-height: 1;
-      margin: 0.5rem 0;
+      display: block;
+      text-shadow:
+        0 0 1px var(--orange),
+        1px 0px 0 var(--orange-dim),
+        0px 1px 0 var(--orange-dim),
+        2px 2px 3px rgba(28,22,16,0.35);
+      filter: url(#ink-bleed);
+      opacity: 0.88;
+    }
+
+    .stamp-sub {
+      font-size: 0.75rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--teal-dark);
+      opacity: 0.65;
+      display: block;
+      margin-top: 0.4rem;
     }
 
     /* =============================================
-       CONTACT / LINKS PANEL
+       PROJECT CARDS
+    ============================================= */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .project-card {
+      border: 3px solid var(--ink);
+      box-shadow: 4px 4px 0 var(--ink), 5px 5px 0 rgba(28,22,16,0.15);
+      background: var(--panel-bg);
+      overflow: hidden;
+      transition: transform 0.12s, box-shadow 0.12s;
+      filter: url(#roughen-panel);
+      position: relative;
+    }
+
+    /* Watercolor wash on cards */
+    .project-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 0% 0%,   rgba(90,138,140,0.18) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 100% 100%, rgba(212,98,42,0.12) 0%, transparent 60%);
+    }
+
+    .project-card > * { position: relative; z-index: 1; }
+
+    .project-card:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--ink), 7px 7px 0 rgba(28,22,16,0.15);
+    }
+
+    .project-card a { text-decoration: none; color: inherit; display: block; }
+
+    .project-card .thumb {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-bottom: 3px solid var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      overflow: hidden;
+      position: relative;
+      /* Watercolor wash placeholder — teal + vertical pencil strokes */
+      background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='60'%3E%3Cline x1='6' y1='0' x2='5.5' y2='60' stroke='rgba(28,22,16,0.07)' stroke-width='0.8'/%3E%3Cline x1='14' y1='1' x2='14.5' y2='60' stroke='rgba(28,22,16,0.045)' stroke-width='0.55'/%3E%3Cline x1='22' y1='0' x2='21.5' y2='60' stroke='rgba(28,22,16,0.08)' stroke-width='0.9'/%3E%3Cline x1='30' y1='0' x2='30.5' y2='60' stroke='rgba(28,22,16,0.04)' stroke-width='0.6'/%3E%3Cline x1='38' y1='1' x2='37.5' y2='60' stroke='rgba(28,22,16,0.065)' stroke-width='0.75'/%3E%3C/svg%3E"),
+        radial-gradient(ellipse 70% 60% at 20% 20%, rgba(90,138,140,0.45) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 50% at 80% 80%, rgba(212,98,42,0.25) 0%, transparent 60%);
+      background-size: 44px 60px, 100% 100%, 100% 100%;
+      background-color: var(--cream-mid);
+    }
+
+    .project-card .thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      mix-blend-mode: multiply;
+      filter: grayscale(20%) contrast(1.1) sepia(15%);
+    }
+
+    .project-card .card-body { padding: 0.75rem; }
+
+    .project-card h3 {
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.3rem;
+      letter-spacing: 2px;
+      margin-bottom: 4px;
+    }
+
+    .project-card p { font-size: 0.82rem; line-height: 1.5; }
+
+    .tag {
+      display: inline-block;
+      font-size: 0.62rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      background: var(--teal-dark);
+      color: var(--cream);
+      padding: 2px 8px;
+      margin-top: 6px;
+      margin-right: 3px;
+    }
+
+    /* =============================================
+       SKILLS
+    ============================================= */
+    .skills-list {
+      list-style: none;
+      margin-top: 0.75rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.35rem 1rem;
+    }
+
+    .skills-list li {
+      font-size: 0.9rem;
+      padding-left: 1rem;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .skills-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--orange);
+    }
+
+    /* =============================================
+       LINKS
     ============================================= */
     .links-list {
       list-style: none;
       margin-top: 1rem;
       display: flex;
-      flex-direction: column;
+      flex-wrap: wrap;
       gap: 0.6rem;
     }
 
     .links-list a {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: 'Bangers', cursive;
-      font-size: 1.3rem;
-      letter-spacing: 1px;
-      color: var(--white);
+      font-family: 'Bebas Neue', cursive;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      color: var(--cream);
       text-decoration: none;
-      background: var(--black);
-      padding: 6px 14px;
-      border: 2px solid var(--white);
-      box-shadow: 3px 3px 0 rgba(255,255,255,0.4);
-      transition: transform 0.1s, box-shadow 0.1s;
+      background: var(--teal-dark);
+      padding: 6px 16px;
+      border: 2px solid rgba(240,232,204,0.2);
+      box-shadow: 3px 3px 0 var(--orange), 4px 4px 0 rgba(212,98,42,0.25);
+      transition: transform 0.1s, box-shadow 0.1s, background 0.1s;
+      display: inline-block;
+      filter: url(#roughen-subtle);
     }
 
     .links-list a:hover {
       transform: translate(-2px, -2px);
-      box-shadow: 5px 5px 0 rgba(255,255,255,0.4);
+      box-shadow: 5px 5px 0 var(--orange);
+      background: var(--orange-dim);
+    }
+
+    /* =============================================
+       INK RULE
+    ============================================= */
+    .ink-rule {
+      width: 100%;
+      height: 5px;
+      background: var(--ink);
+      box-shadow: 0 2px 0 rgba(28,22,16,0.25);
+      filter: url(#roughen-subtle);
+    }
+
+    /* =============================================
+       TORN EDGE
+    ============================================= */
+    .torn-divider {
+      height: 22px;
+      background: var(--ink);
+      filter: url(#roughen-subtle);
+      clip-path: polygon(
+        0% 0%, 1.5% 70%, 3% 30%, 4.5% 85%, 6% 45%, 7.5% 90%,
+        9% 35%, 10.5% 80%, 12% 25%, 13.5% 75%, 15% 40%,
+        16.5% 95%, 18% 50%, 19.5% 80%, 21% 30%, 22.5% 65%,
+        24% 20%, 25.5% 75%, 27% 45%, 28.5% 100%, 30% 55%,
+        31.5% 85%, 33% 35%, 34.5% 70%, 36% 15%, 37.5% 60%,
+        39% 25%, 40.5% 80%, 42% 50%, 43.5% 90%, 45% 30%,
+        46.5% 65%, 48% 20%, 49.5% 75%, 51% 40%, 52.5% 85%,
+        54% 25%, 55.5% 70%, 57% 45%, 58.5% 95%, 60% 55%,
+        61.5% 80%, 63% 30%, 64.5% 70%, 66% 40%, 67.5% 90%,
+        69% 50%, 70.5% 85%, 72% 25%, 73.5% 65%, 75% 35%,
+        76.5% 80%, 78% 45%, 79.5% 90%, 81% 30%, 82.5% 75%,
+        84% 50%, 85.5% 85%, 87% 30%, 88.5% 70%, 90% 20%,
+        91.5% 60%, 93% 35%, 94.5% 80%, 96% 45%, 97.5% 85%,
+        99% 50%, 100% 60%, 100% 0%
+      );
     }
 
     /* =============================================
        FOOTER
     ============================================= */
     footer {
+      background: var(--ink);
+      color: var(--cream-dark);
       text-align: center;
-      padding: 2rem;
-      font-family: 'Bangers', cursive;
-      letter-spacing: 2px;
-      font-size: 1rem;
-      border-top: var(--border);
-      margin-top: 2rem;
-      background: var(--black);
-      color: var(--yellow);
+      padding: 1.5rem 2rem;
+      font-family: 'Special Elite', serif;
+      font-size: 0.78rem;
+      letter-spacing: 2.5px;
+      border-top: 4px solid var(--teal);
+      position: relative;
+      overflow: hidden;
+    }
+
+    footer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg,
+        rgba(90,138,140,0.12) 0%,
+        transparent 50%,
+        rgba(212,98,42,0.08) 100%
+      );
+    }
+
+    footer strong { color: var(--cream); position: relative; }
+
+    /* =============================================
+       ANIMATIONS
+    ============================================= */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* =============================================
-       RESPONSIVE — stack to single column on mobile
+       RESPONSIVE
     ============================================= */
     @media (max-width: 600px) {
-      main {
-        grid-template-columns: 1fr;
-      }
-      .panel--wide {
-        grid-column: 1;
-      }
+      main { grid-template-columns: 1fr; }
+      .panel--wide { grid-column: 1; }
+      .skills-list { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-  <!-- =============================================
-       HEADER — your splash page panel
-  ============================================= -->
+  <!-- SVG Filters -->
+  <svg class="svg-filters" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="roughen" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" result="noise" seed="2"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+      <filter id="roughen-subtle" x="-3%" y="-10%" width="106%" height="130%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" seed="5"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.8" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+      <filter id="roughen-panel" x="-2%" y="-2%" width="104%" height="104%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.025" numOctaves="4" result="noise" seed="8"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+      <filter id="ink-bleed" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="3" result="noise" seed="12"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="2" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+        <feGaussianBlur in="displaced" stdDeviation="0.4" result="blurred"/>
+        <feComposite in="displaced" in2="blurred" operator="over"/>
+      </filter>
+
+      <!-- WATERCOLOR filter: soft blurry edges like wet pigment bleeding -->
+      <filter id="watercolor" x="-8%" y="-8%" width="116%" height="116%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.02 0.03" numOctaves="5" seed="3" result="wc-noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="wc-noise" scale="8"
+                           xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+        <feGaussianBlur in="displaced" stdDeviation="1.2" result="blurred"/>
+        <feBlend in="SourceGraphic" in2="blurred" mode="multiply" result="blended"/>
+        <feComposite in="blended" in2="SourceGraphic" operator="over"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- HEADER -->
   <header>
     <div class="header-inner">
-      <div class="avatar-box">
-        <!-- REPLACE with: <img src="your-portrait.png" alt="[Your Name]"> -->
-        🎨
+      <div class="header-accent-bar"></div>
+      <div class="header-content">
+        <span class="issue-tag">Portfolio · Issue No. 1</span>
+        <h1>YOUR<br><span>NAME</span></h1>
+        <p class="tagline">Pixel artist · game dev · maker of weird things</p>
       </div>
-      <div class="header-text">
-        <h1>YOUR NAME</h1>
-        <p class="tagline">Artist · Developer · Pixel Wizard</p>
-      </div>
+      <div class="header-deco">EST · 20XX · ISSUE 001</div>
     </div>
   </header>
 
-  <!-- NAV -->
+  <div class="ink-rule"></div>
+
   <nav>
     <a href="#about">About</a>
-    <a href="#projects">Projects</a>
+    <a href="#projects">Work</a>
+    <a href="#skills">Skills</a>
     <a href="#contact">Contact</a>
   </nav>
 
-  <!-- =============================================
-       COMIC PANELS
-  ============================================= -->
   <main>
 
-    <!-- PANEL 1: About (wide, yellow) -->
-    <section class="panel panel--wide panel--yellow" id="about">
-      <span class="panel-label">Panel 01</span>
+    <!-- ABOUT — teal wash -->
+    <section class="panel panel--wide panel--teal" id="about">
+      <span class="panel-num">01</span>
       <h2>Origin Story</h2>
       <p>
-        Hi! I'm <strong>[Your Name]</strong> — a pixel artist, game developer, and maker of weird fun things.
-        I build games, draw little worlds, and occasionally write code that does something useful.
-        Based in <strong>[Your City]</strong>.
+        Hi — I'm <strong>[Your Name]</strong>. I make pixel art, build small games, and occasionally
+        write code that surprises me. Based in <strong>[Your City]</strong>. I'm drawn to the weird,
+        the cozy, and the slightly haunted.
       </p>
-
-      <!-- Speech bubble example — feels very comic book -->
       <div class="bubble">
         "I make games about haunted houses, mopey mages, and things that blink at you."
       </div>
     </section>
 
-    <!-- PANEL 2: SFX accent (small, tilted) -->
-    <div class="panel panel--tilt panel--red" aria-hidden="true">
-      <span class="sfx">POW!</span>
-      <span class="sfx" style="font-size:2rem; color: var(--white);">Check out my work ↓</span>
+    <!-- STAMP — dots + orange -->
+    <div class="panel panel--dots" aria-hidden="true"
+         style="display:flex; flex-direction:column; justify-content:center; min-height:150px;">
+      <span class="stamp">EST.<br>20XX</span>
+      <span class="stamp-sub">artist · developer</span>
     </div>
 
-    <!-- PANEL 3: Skills -->
-    <section class="panel panel--blue">
-      <span class="panel-label">Panel 02</span>
-      <h2 style="color:var(--white);">Powers &amp; Abilities</h2>
-      <p style="color:var(--white);">
-        Pixel Art · Game Design · Aseprite · Unity / Godot · JavaScript · Creative Writing · Character Design · Sound Design
-      </p>
+    <!-- SKILLS — warm wash -->
+    <section class="panel panel--warm" id="skills">
+      <span class="panel-num">02</span>
+      <h2>Powers</h2>
+      <ul class="skills-list">
+        <li>Pixel Art</li>
+        <li>Game Design</li>
+        <li>Aseprite</li>
+        <li>Godot / Unity</li>
+        <li>JavaScript</li>
+        <li>Character Design</li>
+        <li>Creative Writing</li>
+        <li>Sound Design</li>
+      </ul>
     </section>
 
-    <!-- PANEL 4: Projects (wide) -->
+    <!-- PROJECTS — default wash -->
     <section class="panel panel--wide" id="projects">
-      <span class="panel-label">Panel 03</span>
+      <span class="panel-num">03</span>
       <h2>The Work</h2>
-
       <div class="projects-grid">
 
-        <!-- PROJECT CARD — duplicate this block for each project -->
         <div class="project-card">
           <a href="https://your-itch-link.itch.io/house-haunters" target="_blank" rel="noopener">
-            <div class="thumb">
-              <!-- REPLACE emoji with: <img src="house-haunters-thumb.png" alt="House Haunters"> -->
-              👻
-            </div>
+            <div class="thumb">👻</div>
             <div class="card-body">
               <h3>House Haunters</h3>
-              <p>A cozy horror game about competitive haunting. 48-hour jam game.</p>
+              <p>A cozy horror game about competitive haunting. 48-hour jam entry.</p>
               <span class="tag">Game Jam</span>
               <span class="tag">Pixel Art</span>
             </div>
@@ -518,7 +779,7 @@
             <div class="thumb">👁️</div>
             <div class="card-body">
               <h3>Blink!</h3>
-              <p>Short description of Blink! — what it is and what makes it interesting.</p>
+              <p>Short description — what it is and what makes it interesting.</p>
               <span class="tag">Game</span>
             </div>
           </a>
@@ -529,48 +790,43 @@
             <div class="thumb">🧙</div>
             <div class="card-body">
               <h3>Mopey Mage</h3>
-              <p>Short description of Mopey Mage — what makes it special.</p>
+              <p>Short description — what makes it special.</p>
               <span class="tag">RPG</span>
               <span class="tag">Pixel Art</span>
             </div>
           </a>
         </div>
 
-        <!-- ADD MORE CARDS HERE -->
-
       </div>
     </section>
 
-    <!-- PANEL 5: Contact -->
-    <section class="panel panel--wide" id="contact" style="background:var(--black);">
-      <span class="panel-label" style="background:var(--yellow); color:var(--black);">Panel 04</span>
-      <h2 style="color:var(--yellow);">Find Me Out There</h2>
-
+    <!-- CONTACT — dark ink -->
+    <section class="panel panel--wide panel--ink" id="contact">
+      <span class="panel-num" style="color:rgba(240,232,204,0.25);">04</span>
+      <h2 style="color:var(--teal-light);">Find Me</h2>
       <ul class="links-list">
         <li><a href="https://github.com/yourusername" target="_blank">⚙ GitHub</a></li>
         <li><a href="https://yourname.itch.io" target="_blank">🎮 itch.io</a></li>
         <li><a href="https://linkedin.com/in/yourname" target="_blank">💼 LinkedIn</a></li>
-        <li><a href="mailto:you@email.com">✉ Email Me</a></li>
-        <!-- Add Etsy, Twitter/X, etc. here -->
+        <li><a href="mailto:you@email.com">✉ Email</a></li>
       </ul>
     </section>
 
   </main>
 
+  <div class="torn-divider" aria-hidden="true"></div>
+
   <footer>
-    © <span id="year"></span> YOUR NAME — Made with ☕ &amp; pixel dust
+    © <span id="year"></span> <strong>YOUR NAME</strong> &nbsp;·&nbsp; made with ink &amp; pixels
   </footer>
 
   <script>
-    // Auto-update copyright year
     document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Smooth scroll for nav links
     document.querySelectorAll('a[href^="#"]').forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
-        const target = document.querySelector(link.getAttribute('href'));
-        if (target) target.scrollIntoView({ behavior: 'smooth' });
+        const t = document.querySelector(link.getAttribute('href'));
+        if (t) t.scrollIntoView({ behavior: 'smooth' });
       });
     });
   </script>
