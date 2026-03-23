@@ -926,7 +926,7 @@
 <nav>
   <a href="#about">About</a>
   <a href="#content">Work</a>
-  <a href="#contact">Contact</a>
+  <a href="#contact" id="nav-contact">Contact</a>
 </nav>
 
 <!-- =============================================
@@ -1182,6 +1182,15 @@
         <img src="painting.png" alt="Painting" style="width:100%; display:block; border-bottom: 2px solid var(--ink);">
       </div>
 
+      <section class="panel panel--wide panel--ink" id="contact">
+      <span class="panel-num" style="color:rgba(240,232,204,0.25);">04</span>
+      <h2 style="color:var(--teal-light);">Find My Art</h2>
+        <ul class="links-list">
+          <li><a href="mailto:addisonabrar@gmail.com">✉ Email</a></li>
+          <li><a href="https://linkedin.com/in/addisonabrar" target="_blank">💼 LinkedIn</a></li>
+        </ul>
+      </section>
+
     </div>
     <!-- END PATH: ART -->
 
@@ -1306,7 +1315,7 @@
       </section>
 
       <!-- Contact -->
-      <section class="panel panel--wide panel--ink">
+      <section class="panel panel--wide panel--ink" id="contact">
         <span class="panel-num" style="color:rgba(240,232,204,0.25);">04</span>
         <h2 style="color:var(--teal-light);">Say Hi</h2>
         <ul class="links-list">
@@ -1328,7 +1337,7 @@
      FOOTER
 ============================================= -->
 <footer>
-  © <span id="year"></span> <strong>ADDISON ABRAR</strong> &nbsp;·&nbsp; made with ink &amp; pixels
+  © <span id="year"></span> <strong>ADDISON ABRAR</strong> 
 </footer>
 
 
@@ -1457,6 +1466,15 @@
       if (t) t.scrollIntoView({ behavior: 'smooth' });
     });
   });
+
+    // Contact nav — scrolls to the active path's contact panel
+  document.getElementById('nav-contact').addEventListener('click', e => {
+    e.preventDefault();
+    const activeSection = document.querySelector('.path-section.active');
+    const contactPanel = activeSection.querySelector('.panel--ink');
+    if (contactPanel) contactPanel.scrollIntoView({ behavior: 'smooth' });
+  });
+  
 </script>
 
 </body>
