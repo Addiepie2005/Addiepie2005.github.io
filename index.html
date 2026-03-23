@@ -912,7 +912,7 @@
     <div class="header-content">
       <span class="issue-tag">Portfolio · Issue No. 1</span>
       <h1>ADDISON<br><span>ABRAR</span></h1>
-      <p class="tagline">Artist · Coder · not sure where this is going but it's interesting</p>
+      <p class="tagline">Code · Art · Games</p>
     </div>
     <div class="header-deco">EST · 2024 · ISSUE 001</div>
   </div>
@@ -940,7 +940,7 @@
     <h2>About Me</h2>
     <p>
       Hi, I'm <strong>Addison</strong>! I am a CS major at UCSD who loves to draw.
-      I try to find every way I can to combine those two passions — whether it's
+      I try to find every way I can to combine those two passions, whether it's
       building games, making pixel art, or dabbling in UI/UX.
     </p>
     <div class="bubble">
@@ -1430,6 +1430,21 @@
       const t = document.querySelector(link.getAttribute('href'));
       if (t) t.scrollIntoView({ behavior: 'smooth' });
     });
+  });
+  // Work nav — scrolls to the active path's projects panel
+  document.querySelector('a[href="#content"]').addEventListener('click', e => {
+    e.preventDefault();
+    const activeSection = document.querySelector('.path-section.active');
+    // Look for a panel with h2 containing "Work" or "Art" or "Currently"
+    const panels = activeSection.querySelectorAll('.panel');
+    let target = null;
+    panels.forEach(panel => {
+      const h2 = panel.querySelector('h2');
+      if (h2 && (h2.textContent.includes('Work') || h2.textContent.includes('Art') || h2.textContent.includes('Currently'))) {
+        if (!target) target = panel;
+      }
+    });
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
   });
 
     // Contact nav — scrolls to the active path's contact panel
