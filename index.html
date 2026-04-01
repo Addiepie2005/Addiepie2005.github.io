@@ -1372,7 +1372,7 @@
       if (newPath === currentPath) return;
 
       // Scroll to content area before animation plays
-      const contentTop = document.getElementById('content').getBoundingClientRect().top + window.scrollY - 120;
+      const contentTop = document.getElementById('content').getBoundingClientRect().top + window.scrollY - 160;
       window.scrollTo({ top: contentTop, behavior: 'smooth' });
 
       setTimeout(() => {
