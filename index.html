@@ -464,12 +464,15 @@
       background: #fff1bb;
     }
 
-    .panel--yellow::before {
-      background:
-        radial-gradient(ellipse 70% 55% at 5% 5%,   rgba(232,112,42,0.28) 0%, transparent 65%),
-        radial-gradient(ellipse 55% 45% at 95% 95%, rgba(192,80,32,0.2)   0%, transparent 60%),
-        radial-gradient(ellipse 80% 80% at 50% 50%, rgba(253,232,212,0.55) 30%, transparent 100%);
-    }
+  .panel--yellow::before {
+    inset: 0;
+    background:
+      radial-gradient(circle, rgba(232,112,42,0.18) 1.2px, transparent 1.8px),
+      radial-gradient(ellipse 70% 55% at 5% 5%,   rgba(232,112,42,0.28) 0%, transparent 65%),
+      radial-gradient(ellipse 55% 45% at 95% 95%, rgba(192,80,32,0.2)   0%, transparent 60%),
+      radial-gradient(ellipse 80% 80% at 50% 50%, rgba(253,232,212,0.55) 30%, transparent 100%);
+    background-size: 8px 8px, 100% 100%, 100% 100%, 100% 100%;
+  }
 
     .panel--green {
       background: #d8edd8;
@@ -590,7 +593,7 @@
     .resume-download:hover {
       transform: translate(-2px, -2px);
       box-shadow: 6px 6px 0 var(--ink);
-      background: var(--ink);
+      background: var(--teal);
       color: var(--white);
     }
 
@@ -950,13 +953,20 @@
   </section>
 
   <!-- Hello stamp -->
-  <section class="panel panel--yellow" style="display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:150px;">
-    <span class="stamp">HELLO</span>
-    <span class="stamp-sub">welcome to my portfolio zine</span>
+  <section class="panel panel--yellow" style="min-height:150px; overflow:visible; position:relative; z-index: 20;">
+    <img src="self-portrait.png" alt="Addison" style="
+      position: absolute;
+      bottom: -35px;
+      left: 1%;   /* adjust this number to taste */
+      height: calc(120% + 35px);  /* matches the panel height + your offset */
+      width: auto;                 /* scales naturally from height */
+      object-fit: contain;
+      z-index: 10;
+    ">
   </section>
 
   <!-- Path chooser -->
-  <div class="choice-panel">
+  <div class="choice-panel" style="z-index: 1;">
     <p class="choice-label">Choose your path ↓</p>
     <button class="path-btn" data-path="code">
       <span class="btn-icon">⚙</span> Code
@@ -968,6 +978,15 @@
       <span class="btn-icon">✦</span> Personal
     </button>
   </div>
+
+  <!-- Resume -->
+  <section class="panel panel--wide panel--ink">
+    <span class="panel-num">04</span>
+    <h2 style="color:var(--teal-light);">Resume</h2>
+    <p style="color:var(--teal-light); opacity:0.8;">CS student at UC San Diego · Available for internships &amp; collaborations.</p>
+    <a class="resume-download" href="Abrar-resume.pdf" target="_blank" rel="noopener">↓ Download PDF</a>
+    <span class="resume-note" style="color:var(--teal-light);">last updated 2026</span>
+  </section>
 
 </div>
 
@@ -1008,7 +1027,7 @@
 
       <!-- Stamp accent -->
       <div class="panel panel--dots" style="display:flex; flex-direction:column; justify-content:center; min-height:150px;">
-        <span class="stamp">CODE<br>PATH</span>
+        <span class="stamp">CODE</span>
         <span class="stamp-sub">cs student · game dev</span>
       </div>
 
@@ -1089,15 +1108,6 @@
         </div>
       </section>
 
-      <!-- Resume -->
-      <section class="panel panel--wide panel--yellow">
-        <span class="panel-num">04</span>
-        <h2>Resume</h2>
-        <p>CS student at UC San Diego · Available for internships &amp; collaborations.</p>
-        <a class="resume-download" href="Abrar-resume.pdf" target="_blank" rel="noopener">↓ Download PDF</a>
-        <span class="resume-note">last updated 2026</span>
-      </section>
-
       <!-- Contact -->
       <section class="panel panel--wide panel--ink" id="contact">
         <span class="panel-num" style="color:rgba(240,232,204,0.25);">05</span>
@@ -1145,7 +1155,7 @@
 
       <!-- Art stamp -->
       <div class="panel panel--dots" style="display:flex; flex-direction:column; justify-content:center; min-height:150px;">
-        <span class="stamp">ART<br>PATH</span>
+        <span class="stamp">ART</span>
         <span class="stamp-sub">pixel artist · illustrator</span>
       </div>
 
@@ -1218,11 +1228,10 @@
         </div>
       </section>
 
-      <!-- Fun facts -->
-      <section class="panel">
-        <span class="panel-num">02</span>
-        <h2>Blank</h2>
-      </section>
+      <!-- Stamp accent -->
+      <div class="panel panel--dots" style="display:flex; flex-direction:column; justify-content:center; min-height:150px;">
+        <span class="stamp">PERSONAL</span>
+      </div>
 
       <!-- Travel -->
       <section class="panel panel--wide panel--teal">
