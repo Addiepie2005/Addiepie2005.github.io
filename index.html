@@ -1369,77 +1369,81 @@
 
   // Animated page flip
   function flipToPath(newPath) {
-    if (newPath === currentPath) return;
+      if (newPath === currentPath) return;
 
-    buttons.forEach(b => b.style.pointerEvents = 'none');
+      // Scroll to content area before animation plays
+      const contentTop = document.getElementById('content').getBoundingClientRect().top + window.scrollY - 120;
+      window.scrollTo({ top: contentTop, behavior: 'smooth' });
 
-    const fullW = flipper.offsetWidth;
-    const fullH = flipper.offsetHeight;
-    const halfW = fullW / 2;
-
-    const cappedH = Math.min(fullH, window.innerHeight * 0.9);
-    stage.style.height = cappedH + 'px';
-
-    function makeClone(pathId) {
-      const clone = flipper.cloneNode(true);
-      clone.style.cssText = `position:absolute; top:0; left:0; width:${fullW}px; margin:0; padding:0 1rem; max-height:${fullH}px; overflow:hidden;`;
-      clone.querySelectorAll('.path-section').forEach(s => s.style.display = 'none');
-      const active = clone.querySelector('#path-' + pathId);
-      if (active) active.style.display = 'grid';
-      return clone;
-    }
-
-    // Front face — right half of current content
-    const frontFace = stage.querySelector('.page-leaf-front');
-    frontFace.innerHTML = '';
-    const frontWrap = document.createElement('div');
-    frontWrap.style.cssText = 'position:absolute; inset:0; overflow:hidden;';
-    const frontClone = makeClone(currentPath);
-    frontClone.style.left = `-${halfW}px`;
-    frontWrap.appendChild(frontClone);
-    frontFace.appendChild(frontWrap);
-
-    // Back face — left half of incoming content
-    const backFace = stage.querySelector('.page-leaf-back');
-    backFace.innerHTML = '';
-    const backWrap = document.createElement('div');
-    backWrap.style.cssText = 'position:absolute; inset:0; overflow:hidden;';
-    const backClone = makeClone(newPath);
-    backClone.style.left = '0px';
-    backClone.style.width = `${fullW + 32}px`;
-    backWrap.appendChild(backClone);
-    backFace.appendChild(backWrap);
-
-    flipper.classList.add('is-turning');
-    stage.classList.add('active');
-
-    leaf.style.transition = 'none';
-    leaf.style.transform = 'rotateY(0deg)';
-    leaf.getBoundingClientRect(); // force reflow
-
-    const FOLD = 560;
-    leaf.style.transition = `transform ${FOLD}ms cubic-bezier(0.42, 0, 0.58, 1)`;
-    leaf.style.transform = 'rotateY(-180deg)';
-
-    setTimeout(() => {
-      showPath(newPath);
-      flipper.classList.remove('is-turning');
-    }, FOLD * 0.1);
-
-    setTimeout(() => {
-      stage.style.transition = 'opacity 100ms ease';
-      stage.style.opacity = '0';
       setTimeout(() => {
-        stage.classList.remove('active');
-        stage.style.transition = 'none';
-        stage.style.opacity = '1';
-        leaf.style.transition = 'none';
+        buttons.forEach(b => b.style.pointerEvents = 'none');
+
+        const fullW = flipper.offsetWidth;
+        const fullH = flipper.offsetHeight;
+        const halfW = fullW / 2;
+
+        const cappedH = Math.min(fullH, window.innerHeight * 0.9);
+        stage.style.height = cappedH + 'px';
+
+        function makeClone(pathId) {
+          const clone = flipper.cloneNode(true);
+          clone.style.cssText = `position:absolute; top:0; left:0; width:${fullW}px; margin:0; padding:0 1rem; max-height:${fullH}px; overflow:hidden;`;
+          clone.querySelectorAll('.path-section').forEach(s => s.style.display = 'none');
+          const active = clone.querySelector('#path-' + pathId);
+          if (active) active.style.display = 'grid';
+          return clone;
+        }
+
+        const frontFace = stage.querySelector('.page-leaf-front');
         frontFace.innerHTML = '';
+        const frontWrap = document.createElement('div');
+        frontWrap.style.cssText = 'position:absolute; inset:0; overflow:hidden;';
+        const frontClone = makeClone(currentPath);
+        frontClone.style.left = `-${halfW}px`;
+        frontWrap.appendChild(frontClone);
+        frontFace.appendChild(frontWrap);
+
+        const backFace = stage.querySelector('.page-leaf-back');
         backFace.innerHTML = '';
-        buttons.forEach(b => b.style.pointerEvents = '');
-      }, 100);
-    }, FOLD);
-  }
+        const backWrap = document.createElement('div');
+        backWrap.style.cssText = 'position:absolute; inset:0; overflow:hidden;';
+        const backClone = makeClone(newPath);
+        backClone.style.left = '0px';
+        backClone.style.width = `${fullW + 32}px`;
+        backWrap.appendChild(backClone);
+        backFace.appendChild(backWrap);
+
+        flipper.classList.add('is-turning');
+        stage.classList.add('active');
+
+        leaf.style.transition = 'none';
+        leaf.style.transform = 'rotateY(0deg)';
+        leaf.getBoundingClientRect();
+
+        const FOLD = 560;
+        leaf.style.transition = `transform ${FOLD}ms cubic-bezier(0.42, 0, 0.58, 1)`;
+        leaf.style.transform = 'rotateY(-180deg)';
+
+        setTimeout(() => {
+          showPath(newPath);
+          flipper.classList.remove('is-turning');
+        }, FOLD * 0.1);
+
+        setTimeout(() => {
+          stage.style.transition = 'opacity 100ms ease';
+          stage.style.opacity = '0';
+          setTimeout(() => {
+            stage.classList.remove('active');
+            stage.style.transition = 'none';
+            stage.style.opacity = '1';
+            leaf.style.transition = 'none';
+            frontFace.innerHTML = '';
+            backFace.innerHTML = '';
+            buttons.forEach(b => b.style.pointerEvents = '');
+          }, 100);
+        }, FOLD);
+      }, 400); // delay lets the scroll happen before the flip starts
+    }
 
   // Wire up buttons
   buttons.forEach(btn => {
